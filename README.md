@@ -6,7 +6,7 @@
 A comprehensive, practitioner-oriented methodology guide for **structural Industrial Organization (IO) demand estimation research**. Built as a [Claude Code](https://claude.ai/code) skill that provides real-time methodological guidance during research.
 
 Distilled from two sources:
-1. **Thesis supervision feedback** by Prof. Louis Pape (Telecom Paris / CREST) during a structural demand estimation project on AI model marketplaces
+1. **Practical experience** from structural demand estimation research on digital platform markets
 2. **Extensive survey of 60+ academic papers** spanning demand estimation, causal inference, and empirical best practices
 
 ---
@@ -100,15 +100,15 @@ Before submitting any structural IO paper, verify:
 
 ---
 
-## Key Principles (from thesis supervision)
+## Key Principles
 
-> **"If you use nonlinear GMM, you need to deal with non-convexity of the criterion function in some way. Try running a Monte Carlo study to check if your estimation strategy is plausible."** — Prof. Pape
+> **"If you use nonlinear GMM, you need to deal with non-convexity of the criterion function in some way. Try running a Monte Carlo study to check if your estimation strategy is plausible."**
 
-> **"Please keep in mind that the Hansen test does not dictate model choice."** — Prof. Pape
+> **"The Hansen test does not dictate model choice."** — Don't let a single specification test override economic reasoning.
 
-> **"I don't understand what your natural experiment is supposed to teach us."** — Prof. Pape (on the importance of articulating the economic question before the statistical exercise)
+> **"What is this natural experiment supposed to teach us?"** — Every empirical exercise must have a clear economic question articulated *before* the statistical procedure.
 
-> **"Can you send me some RDD plots? Perhaps run these tests at the pipeline level?"** — Prof. Pape (on always showing visual evidence and testing at multiple aggregation levels)
+> **"Show me the RDD plots. Run the tests at different levels of aggregation."** — Visual evidence and cross-level robustness are non-negotiable.
 
 ---
 
@@ -144,7 +144,7 @@ Before submitting any structural IO paper, verify:
 
 ## Contributing
 
-Contributions are welcome. If you have methodological advice from your own supervision, referee reports, or published best-practices papers, please open a PR or issue.
+Contributions are welcome. If you have methodological advice from referee reports, supervision experience, or published best-practices papers, please open a PR or issue.
 
 Areas where contributions would be especially valuable:
 - Dynamic discrete choice estimation best practices
@@ -168,7 +168,7 @@ If you find this guide useful in your research, please cite:
 ```bibtex
 @misc{structural-io-research-skill,
   title={Structural IO Research Methodology Guide},
-  author={Zhang, Weike},
+  author={Structural IO Research Contributors},
   year={2026},
   url={https://github.com/shoal-rat/structural-io-research},
   note={Claude Code skill for structural demand estimation research methodology}

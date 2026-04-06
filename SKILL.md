@@ -1,13 +1,13 @@
 ---
 name: structural-io-research
-description: Comprehensive methodology guide for structural IO demand estimation research, combining thesis advisor feedback (Prof. Louis Pape, Telecom Paris) with authoritative best practices from the literature. Use this skill whenever working on structural demand models, nested logit estimation, GMM, instrumental variables, natural experiments, platform economics research, DiD, RDD, merger simulation, or counterfactual analysis. Triggers on keywords like demand estimation, nested logit, Berry, BLP, GMM, IV, RDD, DiD, nesting structure, search costs, Monte Carlo, Hansen J, merger simulation, counterfactual, welfare, market definition, outside good, instruments, weak identification, bootstrap, pre-testing, replication, referee.
+description: Comprehensive methodology guide for structural IO demand estimation research, combining practical supervision experience with authoritative best practices from the literature. Use this skill whenever working on structural demand models, nested logit estimation, GMM, instrumental variables, natural experiments, platform economics research, DiD, RDD, merger simulation, or counterfactual analysis. Triggers on keywords like demand estimation, nested logit, Berry, BLP, GMM, IV, RDD, DiD, nesting structure, search costs, Monte Carlo, Hansen J, merger simulation, counterfactual, welfare, market definition, outside good, instruments, weak identification, bootstrap, pre-testing, replication, referee.
 user-invocable: true
 argument-hint: "topic or question"
 ---
 
 # The Definitive Structural IO Research Methodology Guide
 
-**Sources:** (1) Thesis supervision feedback by Prof. Louis Pape (Telecom Paris / CREST), March-April 2026. (2) Extensive survey of the academic literature including Conlon & Gortmaker (2020), Berry & Haile (2014), Gandhi & Houde (2020), Cattaneo, Idrobo & Titiunik (2020/2024), Roth et al. (2023), and dozens of other authoritative references. Each principle is grounded in specific published guidance or supervision feedback.
+**Sources:** (1) Practical experience from structural demand estimation research projects. (2) Extensive survey of the academic literature including Conlon & Gortmaker (2020), Berry & Haile (2014), Gandhi & Houde (2020), Cattaneo, Idrobo & Titiunik (2020/2024), Roth et al. (2023), and dozens of other authoritative references. Each principle is grounded in specific published guidance or hands-on research experience.
 
 ---
 
@@ -156,7 +156,7 @@ The choice of instruments is the most consequential decision in demand estimatio
 ### Key Principle
 A Monte Carlo study is the gold standard for verifying that your estimation strategy works before applying it to real data. It is not optional for nonlinear structural models. The DGP must match your actual empirical setting as closely as possible.
 
-### Do This (Prof. Pape, April 1, 2026: "Try running a Monte Carlo study to check if your estimation strategy is plausible.")
+### Do This
 1. **Fix true parameters** at values close to your real estimates (or at several different configurations to test sensitivity).
 2. **Simulate data from the exact DGP** you assume in your model. Include the same: number of markets, products per market, endogeneity structure (e.g., price correlated with xi), instrument structure, and sample size.
 3. **Estimate the model** using the exact same procedure (same instruments, same GMM weighting, same optimizer settings, same contraction tolerance).
@@ -372,7 +372,7 @@ The DiD literature has undergone a revolution since 2019. The traditional two-wa
 RDD exploits a discontinuity in treatment assignment at a threshold of a running variable. It provides highly credible causal estimates but only at the cutoff -- local average treatment effects. The definitive guides are Cattaneo, Idrobo & Titiunik (2020, 2024). The key threats are manipulation of the running variable and misspecification of the functional form.
 
 ### Do This
-- **Always show the RDD plot.** Binned scatter plot of the outcome vs. the running variable, with fitted local polynomial curves on each side of the cutoff. The visual should make the treatment effect (or lack thereof) obvious. (Prof. Pape: "Can you send me some RDD plots?")
+- **Always show the RDD plot.** Binned scatter plot of the outcome vs. the running variable, with fitted local polynomial curves on each side of the cutoff. The visual should make the treatment effect (or lack thereof) obvious.
 - **Use local polynomial estimation** (Calonico, Cattaneo & Titiunik 2014) rather than global polynomial fits. Global polynomials (high-order) are sensitive to data far from the cutoff and can generate spurious effects.
 - **Use MSE-optimal bandwidth selection** (Calonico, Cattaneo & Titiunik 2014 -- the CCT method). This balances bias and variance optimally. Then use **robust bias-corrected (RBC) inference** for confidence intervals, because the MSE-optimal bandwidth is by construction invalid for standard inference.
 - **Test for manipulation** of the running variable using the density test of Cattaneo, Jansson & Ma (2020) -- implemented in the rddensity package. If agents can precisely manipulate the running variable to be just above or below the cutoff, the RDD is invalid.
@@ -544,7 +544,7 @@ Pre-testing bias arises when the same data are used to select a model specificat
 
 ### Don't Do That
 - **Don't try all 50 specifications and report only the one with a significant result.** This is p-hacking and produces false discoveries at a rate far above the nominal 5%.
-- **Don't use the Hansen J test to select among specifications** and then report inference from the selected specification as if no selection occurred. (Prof. Pape: "The Hansen test does not dictate model choice.")
+- **Don't use the Hansen J test to select among specifications** and then report inference from the selected specification as if no selection occurred. The Hansen test does not dictate model choice.
 - **Don't present your final specification as if it were your first and only attempt.** Referees are sophisticated and will be suspicious of a single specification with perfectly clean results.
 - **Don't let the data tell you the "right" nest structure and then do inference as if you knew it all along.** If nests are data-driven (Almagro et al. 2025), the two-step procedure must account for first-step estimation error in the second step.
 
