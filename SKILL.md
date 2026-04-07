@@ -5,9 +5,9 @@ user-invocable: true
 argument-hint: "topic or question"
 ---
 
-# The Definitive Structural IO Research Methodology Guide
+# Structural IO Research Methodology Guide
 
-**Sources:** (1) Practical experience from structural demand estimation research projects. (2) Extensive survey of the academic literature including Conlon & Gortmaker (2020), Berry & Haile (2014), Gandhi & Houde (2020), Cattaneo, Idrobo & Titiunik (2020/2024), Roth et al. (2023), and dozens of other authoritative references. Each principle is grounded in specific published guidance or hands-on research experience.
+Built from two things: learning the hard way on actual research projects, and reading the papers that would have saved time if read earlier. Covers BLP estimation, nested logit, instruments, causal inference, and how to write the paper without sounding like a chatbot. References include Conlon & Gortmaker (2020), Berry & Haile (2014), Gandhi & Houde (2020), Cattaneo et al. (2020/2024), Roth et al. (2023), and about 60 others.
 
 ---
 
@@ -40,7 +40,7 @@ argument-hint: "topic or question"
 ## 1. BLP/RANDOM COEFFICIENTS DEMAND ESTIMATION BEST PRACTICES
 
 ### Key Principle
-The BLP random coefficients logit model (Berry, Levinsohn & Pakes 1995) is the workhorse of differentiated products demand estimation. Getting it right requires careful attention to numerical implementation, instrument choice, and specification validation. Conlon & Gortmaker (2020) is the definitive practical guide.
+BLP (Berry, Levinsohn & Pakes 1995) is the standard model for differentiated products demand. Most estimation problems trace to sloppy numerics, not deep econometric issues. Conlon & Gortmaker (2020) is the best practical reference.
 
 ### Do This
 - **Use PyBLP** (Conlon & Gortmaker) as the reference implementation. It encodes best practices and is extensible.
@@ -71,7 +71,7 @@ The BLP random coefficients logit model (Berry, Levinsohn & Pakes 1995) is the w
 ## 2. NESTED LOGIT ESTIMATION PITFALLS
 
 ### Key Principle
-The nested logit is a tractable workhorse but its simplicity masks several traps. The nesting parameter (sigma) must satisfy theoretical bounds, the nest structure is a modeling choice with real consequences, and the log-sum term creates endogeneity even when prices are exogenous.
+The nested logit is simple to estimate but easy to get wrong. Sigma must stay in [0,1], the nest structure matters more than people think, and the within-group share is endogenous even when prices are not.
 
 ### Do This
 - **Check that the nesting parameter sigma (or 1-sigma, depending on parameterization) lies in [0,1].** Values outside this range violate random utility maximization (McFadden 1978). If your estimate hits 0, the model collapses to logit (no within-nest correlation). If it exceeds 1 or is negative, the nesting structure is likely wrong.
@@ -98,7 +98,7 @@ The nested logit is a tractable workhorse but its simplicity masks several traps
 ## 3. GMM ESTIMATION FOR NONLINEAR MODELS
 
 ### Key Principle
-Nonlinear GMM -- as used in BLP, search models, and dynamic discrete choice -- presents non-convexity challenges that linear GMM does not. However, Conlon & Gortmaker (2020) show that with proper implementation, multiple local optima are rare in well-identified problems. The key is disciplined numerical practice.
+Nonlinear GMM looks scary because people worry about local optima. Conlon & Gortmaker (2020) show that with tight contraction tolerance, local optima are rare. Most "non-convexity" problems are really numerical sloppiness.
 
 ### Do This
 - **Use the two-step efficient GMM procedure.** Step 1: estimate with the identity or 2SLS weight matrix. Step 2: update the weight matrix using step-1 residuals, then re-estimate. The continuously-updated GMM (CU-GMM) is an alternative but can be numerically less stable.
@@ -127,7 +127,7 @@ Nonlinear GMM -- as used in BLP, search models, and dynamic discrete choice -- p
 ## 4. INSTRUMENTAL VARIABLES IN DEMAND ESTIMATION
 
 ### Key Principle
-The choice of instruments is the most consequential decision in demand estimation after model specification. Weak or invalid instruments produce unreliable estimates and misleading counterfactuals. The literature has evolved from traditional BLP instruments to differentiation IVs to optimal instruments and most recently to recentered instruments.
+Instruments matter more than anything else in demand estimation except maybe the model itself. Bad instruments produce bad estimates, and no amount of robustness checking can fix that. The field has moved from BLP-style sums of competitor characteristics to differentiation IVs (Gandhi & Houde 2020) to recentered instruments (Borusyak et al. 2025).
 
 ### Do This
 - **Start with Differentiation IVs (Gandhi & Houde 2020).** These measure the distance between a product's characteristics and those of its competitors (e.g., |x_j - x_k| for each characteristic, summed over competitors). They substantially outperform traditional BLP instruments (sums of competitor characteristics) because they isolate the variation that matters for identification: how differentiated a product is from its rivals.
@@ -155,14 +155,14 @@ The choice of instruments is the most consequential decision in demand estimatio
 ## 5. MONTE CARLO VALIDATION
 
 ### Key Principle
-A Monte Carlo study is the gold standard for verifying that your estimation strategy works before applying it to real data. It is not optional for nonlinear structural models. The DGP must match your actual empirical setting as closely as possible.
+Before trusting any structural estimate, simulate data where you know the truth and check that your estimator can recover it. This is not optional. If the estimator fails on simulated data, it will fail on real data too.
 
 ### Do This
 1. **Fix true parameters** at values close to your real estimates (or at several different configurations to test sensitivity).
 2. **Simulate data from the exact DGP** you assume in your model. Include the same: number of markets, products per market, endogeneity structure (e.g., price correlated with xi), instrument structure, and sample size.
 3. **Estimate the model** using the exact same procedure (same instruments, same GMM weighting, same optimizer settings, same contraction tolerance).
 4. **Repeat 200-500 times.** 200 is a minimum; 500 is better for precise coverage estimates.
-5. **Report comprehensively:** (a) Mean bias of each parameter. (b) RMSE. (c) 95% CI coverage rate (should be near 0.95). (d) Median bias (more robust than mean to outliers from non-convergence). (e) Rejection rate of specification tests under the true model (should be near nominal size).
+5. **Report these:** (a) Mean bias of each parameter. (b) RMSE. (c) 95% CI coverage rate (should be near 0.95). (d) Median bias (more robust than mean to outliers from non-convergence). (e) Rejection rate of specification tests under the true model (should be near nominal size).
 6. **Vary the DGP systematically:** test with different numbers of products, different instrument strength, different degrees of endogeneity. This reveals where your estimator breaks down.
 7. **Present results in tables and histograms** showing the sampling distribution of each parameter estimate.
 
@@ -170,7 +170,7 @@ A Monte Carlo study is the gold standard for verifying that your estimation stra
 - **Don't use a DGP that is too simple** relative to your actual model. If your real model has 50 products per market and correlated heterogeneity, don't simulate with 5 products and iid errors.
 - **Don't calibrate the MC to make your estimator look good.** Use realistic parameter values and sample sizes. Advani, Kitagawa & Sloczynski (2019) show that empirical Monte Carlo studies designed to select estimators are often worse than random at reducing bias.
 - **Don't skip the MC because it's computationally expensive.** If you can't afford to run the MC, you likely can't afford to trust the estimates. Budget computation time for this.
-- **Don't treat a single MC configuration as definitive.** Test robustness of the MC findings to the DGP specification.
+- **Don't treat a single MC configuration as proof.** Test robustness of the MC findings to the DGP specification.
 
 ### Key References
 - Conlon, C. & Gortmaker, J. (2020). Monte Carlo exercises in the PyBLP best practices paper.
@@ -182,7 +182,7 @@ A Monte Carlo study is the gold standard for verifying that your estimation stra
 ## 6. WEAK INSTRUMENTS IN DEMAND ESTIMATION
 
 ### Key Principle
-Weak instruments are a first-order concern in demand estimation. Standard IV/GMM inference breaks down with weak instruments: point estimates are biased toward OLS, confidence intervals have incorrect coverage, and specification tests lose power. The standard F > 10 rule of thumb (Staiger & Stock 1997) is necessary but not always sufficient.
+Weak instruments mess up everything: biased point estimates, wrong confidence intervals, misleading specification tests. F > 10 is a rough screen, not a guarantee. With many instruments or heteroskedastic errors, you need more than just looking at F.
 
 ### Do This
 - **Report the first-stage F-statistic** (or effective F for multiple endogenous regressors). Compare to Stock & Yogo (2005) critical values for your desired maximal bias (e.g., 10% relative bias of IV to OLS) or maximal size distortion (e.g., actual size of 10% when nominal is 5%).
@@ -210,7 +210,7 @@ Weak instruments are a first-order concern in demand estimation. Standard IV/GMM
 ## 7. IDENTIFICATION IN DIFFERENTIATED PRODUCTS MARKETS
 
 ### Key Principle
-Berry & Haile (2014) provide the foundational nonparametric identification results for differentiated products demand. The key insight: identification comes from observing how market shares respond to exogenous variation in the characteristics of competing products, combined with an exclusion restriction (instruments). The inversion theorem (Berry 1994) is the engine: observed shares map to unique unobserved demand shocks under mild conditions.
+Berry & Haile (2014) answer the question "what can you actually learn from market share data?" The answer: a lot, provided you have instruments and variation across markets. The Berry (1994) inversion maps observed shares to unique mean utilities -- that's where identification starts.
 
 ### Do This
 - **Start from the Berry inversion.** Under mild regularity conditions, any vector of observed market shares is rationalized by a unique vector of mean utilities (delta). This is the first identification result and holds for any model in the BLP class.
@@ -236,7 +236,7 @@ Berry & Haile (2014) provide the foundational nonparametric identification resul
 ## 8. HOW TO WRITE AN EMPIRICAL IO PAPER
 
 ### Key Principle
-An empirical IO paper must clearly state its economic question, identify the source of identifying variation, present credible estimates, and deliver economically meaningful counterfactuals or policy implications. The structure follows a standard template, but the quality of execution -- particularly the identification strategy and robustness -- determines publication.
+The structure of an IO paper is pretty standard. What separates publishable from unpublishable is whether the identification is credible and whether the economic question actually matters. Nobody cares about a technically perfect paper on a boring market.
 
 ### Paper Structure (following Bellemare 2020 and standard IO conventions)
 
@@ -312,7 +312,7 @@ An empirical IO paper must clearly state its economic question, identify the sou
 ## 9. CONSUMER SEARCH MODELS ESTIMATION
 
 ### Key Principle
-Consumer search models endogenize the information set: consumers do not observe all options but must pay a cost (time, effort) to discover products. Estimation is challenging because search behavior is typically unobserved or only partially observed. The key identification challenge is separating search costs from preference heterogeneity.
+In search models, consumers don't see everything -- they pay a cost (time, clicks) to discover products. The hard part is telling apart "didn't search" from "searched and didn't like it." You usually can't observe search behavior directly, which makes identification tricky.
 
 ### Do This
 - **Distinguish sequential vs. simultaneous search.** Sequential search (Weitzman 1979): consumers search one option at a time, stopping when the expected gain falls below the search cost. Simultaneous search (Stigler 1961): consumers choose how many options to sample upfront. The data requirements and identification differ.
@@ -340,7 +340,7 @@ Consumer search models endogenize the information set: consumers do not observe 
 ## 10. DIFFERENCE-IN-DIFFERENCES BEST PRACTICES
 
 ### Key Principle
-The DiD literature has undergone a revolution since 2019. The traditional two-way fixed effects (TWFE) estimator can be severely biased with staggered treatment timing and heterogeneous treatment effects, because it implicitly uses already-treated units as controls. Modern estimators (Callaway & Sant'Anna 2021, Sun & Abraham 2021, de Chaisemartin & D'Haultfoeuille 2020) fix this. The definitive practitioner's guide is Baker, Callaway, Cunningham, Goodman-Bacon & Sant'Anna (2025).
+DiD changed a lot since 2019. The old two-way fixed effects estimator can be badly biased with staggered treatment and heterogeneous effects -- it uses already-treated units as controls, which makes no sense. Callaway & Sant'Anna (2021) and Sun & Abraham (2021) fix this. Read Baker et al. (2025) for the full picture.
 
 ### Do This
 - **Start by diagnosing your TWFE:** Run the Goodman-Bacon (2021) decomposition to understand which 2x2 comparisons are driving the TWFE estimate. If already-treated units receive substantial weight as controls, the TWFE is likely biased.
@@ -370,7 +370,7 @@ The DiD literature has undergone a revolution since 2019. The traditional two-wa
 ## 11. REGRESSION DISCONTINUITY DESIGN BEST PRACTICES
 
 ### Key Principle
-RDD exploits a discontinuity in treatment assignment at a threshold of a running variable. It provides highly credible causal estimates but only at the cutoff -- local average treatment effects. The definitive guides are Cattaneo, Idrobo & Titiunik (2020, 2024). The key threats are manipulation of the running variable and misspecification of the functional form.
+RDD uses a cutoff in a running variable to estimate treatment effects right at the threshold. It only tells you what happens at the cutoff, not away from it. Main references: Cattaneo, Idrobo & Titiunik (2020, 2024). Main threats: people gaming the cutoff, and fitting the wrong functional form.
 
 ### Do This
 - **Always show the RDD plot.** Binned scatter plot of the outcome vs. the running variable, with fitted local polynomial curves on each side of the cutoff. The visual should make the treatment effect (or lack thereof) obvious.
@@ -402,7 +402,7 @@ RDD exploits a discontinuity in treatment assignment at a threshold of a running
 ## 12. MARKET DEFINITION IN DEMAND ESTIMATION
 
 ### Key Principle
-Market definition determines which products compete with each other and the size of the potential market. It is one of the most consequential (and most underappreciated) choices in demand estimation. A wrong market definition biases price elasticities, substitution patterns, and welfare calculations.
+Market definition decides which products are in the choice set and how big the total market is. Get it wrong and your elasticities, substitution patterns, and welfare numbers are all off. Most people don't think about this enough.
 
 ### Do This
 - **Define markets based on economic substitutability,** not data convenience. Products are in the same market if consumers view them as substitutes. The Hypothetical Monopolist Test (SSNIP test -- Small but Significant Non-transitory Increase in Price) from antitrust provides the conceptual framework: could a monopolist of the candidate market profitably raise price by 5-10%?
@@ -427,7 +427,7 @@ Market definition determines which products compete with each other and the size
 ## 13. OUTSIDE OPTION AND MARKET SIZE
 
 ### Key Principle
-The outside option (not buying any product in the market) is the anchor of discrete choice demand models. Its market share -- determined by the assumed market size -- profoundly affects own-price elasticities, welfare calculations, and counterfactual predictions. Yet it is often set by ad hoc assumption. Bugni & Ura (2025) show that 24 out of 29 top-five BLP applications rely on ad hoc market size assumptions, and only 5 test sensitivity.
+The outside option (not buying anything) anchors the whole demand model. How big you assume the total market is determines the outside share, which in turn determines every elasticity and welfare number. Bugni & Ura (2025) checked: 24 of 29 BLP papers in top journals use an ad hoc market size, and only 5 test sensitivity. That's a problem.
 
 ### Do This
 - **Think carefully about what the outside option represents.** For cereals, it might be not eating cereal (or eating oatmeal, toast, etc.). For cars, it might be not buying a car (using public transit, keeping the old car).
@@ -452,7 +452,7 @@ The outside option (not buying any product in the market) is the anchor of discr
 ## 14. COUNTERFACTUAL ANALYSIS AND MERGER SIMULATION
 
 ### Key Principle
-The primary payoff of structural demand estimation is the ability to conduct counterfactual policy experiments: merger simulation, entry/exit analysis, welfare calculations, and pricing counterfactuals. But counterfactual predictions inherit all the assumptions of the structural model, and small changes in demand specification can produce large changes in predicted outcomes.
+The whole point of structural estimation is that you can run counterfactuals: what happens if two firms merge? What if a product exits? What's the welfare effect of a price change? But the counterfactuals are only as good as the model. Change the demand specification a little and the merger prediction can flip sign.
 
 ### Do This
 - **Solve for the new equilibrium** after the counterfactual change (e.g., merger changes the ownership matrix, causing internalization of cross-price effects). Do not just compute partial effects holding other prices fixed.
@@ -479,7 +479,7 @@ The primary payoff of structural demand estimation is the ability to conduct cou
 ## 15. NESTING STRUCTURE CHOICE
 
 ### Key Principle
-In nested logit models, the choice of nesting structure is a modeling decision with real economic consequences. Misspecified nests lead to biased substitution patterns (Fosgerau, Monardo & De Palma 2024). Until recently, practitioners had to choose nests ex ante; Almagro & Ciscato (2025) provide a data-driven alternative.
+Which products go in which nest is a choice you have to make, and getting it wrong biases everything (Fosgerau et al. 2024). For a long time there was no systematic way to pick nests. Almagro et al. (2025) now offer a data-driven approach: cluster products by their demand patterns and let the data decide.
 
 ### Do This
 - **Motivate nests economically.** Products in the same nest should be closer substitutes than products in different nests. Ask: "When a consumer switches away from product A, which products do they switch to?" Those products should be in the same nest.
@@ -506,7 +506,7 @@ In nested logit models, the choice of nesting structure is a modeling decision w
 ## 16. BOOTSTRAP INFERENCE FOR GMM
 
 ### Key Principle
-Standard asymptotic standard errors from nonlinear GMM can be unreliable in finite samples, especially with complex models (BLP, search models, dynamic discrete choice). The bootstrap provides a more reliable alternative but must be implemented correctly for clustered/panel data and nonlinear settings.
+Asymptotic standard errors from nonlinear GMM can be way off in finite samples. The bootstrap gives you a better sense of the actual sampling distribution, but you have to do it right -- resample at the cluster level, not individual observations.
 
 ### Do This
 - **Resample at the cluster level** (market-time period, not individual observations) to preserve the within-cluster correlation structure. If your data has markets as the unit of analysis, resample markets with replacement.
@@ -534,7 +534,7 @@ Standard asymptotic standard errors from nonlinear GMM can be unreliable in fini
 ## 17. PRE-TESTING BIAS AND SPECIFICATION SEARCH
 
 ### Key Principle
-Pre-testing bias arises when the same data are used to select a model specification and then to conduct inference as if that specification were chosen a priori. This invalidates standard confidence intervals and hypothesis tests because the inference does not account for the specification search. This is one of the most pervasive and underappreciated problems in applied economics.
+You use the data to pick the specification, then do inference pretending you knew the specification all along. The confidence intervals are wrong because they don't account for the search. Everyone does this; almost nobody adjusts for it.
 
 ### Do This
 - **Pre-commit to your main specification** before looking at results. Ideally, write the estimation section (instruments, functional form, controls) before running the final analysis. If your project has a pre-analysis plan, follow it.
@@ -560,7 +560,7 @@ Pre-testing bias arises when the same data are used to select a model specificat
 ## 18. REPLICATION, TRANSPARENCY, AND CREDIBILITY
 
 ### Key Principle
-Economics faces a credibility challenge: publication bias, inability to replicate, and specification searching remain widespread (Christensen & Miguel 2018). The solution is a culture of transparency: share code and data, pre-register when possible, and make replication straightforward.
+A lot of published results don't replicate (Christensen & Miguel 2018). The fix is boring but effective: share your code, share your data, make it possible for someone else to reproduce your numbers in one afternoon.
 
 ### Do This
 - **Share your code and data** (or synthetic/simulated data if the real data are proprietary). Top journals now require this. Make it possible for someone to replicate your results in one click.
@@ -585,7 +585,7 @@ Economics faces a credibility challenge: publication bias, inability to replicat
 ## 19. WHAT REFEREES LOOK FOR IN IO PAPERS
 
 ### Key Principle
-Understanding referee expectations is essential for publication. IO referees evaluate papers on the importance of the question, the credibility of identification, the quality of execution, and the contribution to the literature. The bar at top-5 journals is that the paper must teach us something new and important that we could not learn without this particular analysis.
+Knowing what referees care about saves you from writing a paper that's dead on arrival. IO referees check four things: does the question matter, is the identification believable, is the execution clean, and does it teach us something we didn't already know.
 
 ### What Referees Evaluate (Berk 2015, Econometric Society Guidelines)
 
@@ -840,7 +840,7 @@ For the full 29-pattern humanizer reference, see the companion skill at `~/.clau
 ## 21. LESSONS FROM PRACTICE: DATA-DRIVEN NESTING IN PLATFORM MARKETS
 
 ### Key Principle
-When applying the Almagro et al. (2025) data-driven nesting approach to new settings, the crucial requirement is that nest assignments must preserve the exclusion restriction for the instruments. In markets without time-varying exogenous product characteristics (like AI model platforms where the main "price" is an endogenous trending score), demand-side clustering violates instrument validity even though it produces descriptively interesting groups.
+When applying the Almagro et al. (2025) data-driven nesting approach to new settings, the requirement that matters most is that nest assignments must preserve the exclusion restriction for the instruments. In markets without time-varying exogenous product characteristics (like AI model platforms where the main "price" is an endogenous trending score), demand-side clustering violates instrument validity even though it produces descriptively interesting groups.
 
 ### Do This
 - **Check corr(n_in_nest, outcome) before running structural estimation.** If popular products cluster into small nests and unpopular products into large nests, the count instruments will have the WRONG sign in the first stage. This correlation should be approximately zero.
