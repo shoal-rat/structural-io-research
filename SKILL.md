@@ -1,6 +1,6 @@
 ---
 name: structural-io-research
-description: Comprehensive methodology guide for structural IO demand estimation research, combining practical supervision experience with authoritative best practices from the literature. Use this skill whenever working on structural demand models, nested logit estimation, GMM, instrumental variables, natural experiments, platform economics research, DiD, RDD, merger simulation, or counterfactual analysis. Triggers on keywords like demand estimation, nested logit, Berry, BLP, GMM, IV, RDD, DiD, nesting structure, search costs, Monte Carlo, Hansen J, merger simulation, counterfactual, welfare, market definition, outside good, instruments, weak identification, bootstrap, pre-testing, replication, referee.
+description: Methodology guide for structural IO demand estimation research, with integrated humanizer for natural academic writing. Covers BLP, nested logit, GMM, IV, DiD, RDD, merger simulation, counterfactual analysis, and paper writing. Includes a 29-pattern anti-AI writing check adapted from the humanizer skill. Triggers on demand estimation, nested logit, Berry, BLP, GMM, IV, RDD, DiD, nesting structure, search costs, Monte Carlo, Hansen J, merger simulation, counterfactual, welfare, market definition, outside good, instruments, weak identification, bootstrap, pre-testing, replication, referee, writing, paper, humanize.
 user-invocable: true
 argument-hint: "topic or question"
 ---
@@ -33,6 +33,7 @@ argument-hint: "topic or question"
 18. Replication, Transparency, and Credibility
 19. What Referees Look For in IO Papers
 20. Workflow Checklists
+21. Writing Like a Human: Integrated Humanizer for IO Research
 
 ---
 
@@ -664,6 +665,79 @@ Understanding referee expectations is essential for publication. IO referees eva
 - [ ] **Code and data packaged for replication?** Master script, documented, version-controlled?
 - [ ] **Pre-testing bias avoided?** Specification not chosen to maximize significance?
 - [ ] **Hansen J not dictating model choice?** Model compared on economic grounds, not just J statistic?
+
+---
+
+## 21. WRITING LIKE A HUMAN: INTEGRATED HUMANIZER FOR IO RESEARCH
+
+This section integrates the [humanizer skill](https://github.com/shoal-rat/humanizer) into the IO research workflow. Academic economics writing has its own version of AI-slop: vague significance claims, padded prose, and mechanical structure. Good IO papers read like a person is thinking on the page, not like a template got filled in.
+
+### When writing or editing any text for this research, apply the humanizer skill
+
+The full humanizer rules (29 patterns to avoid) live in the companion skill at `~/.claude/skills/humanizer/SKILL.md`. Here is how they apply specifically to IO research writing:
+
+### IO-Specific AI Writing Traps
+
+**1. Inflated significance claims.** "This paper makes a pivotal contribution to our understanding of platform markets" -- no. Say what you found and let the reader decide if it matters. "We estimate that a 1% increase in trending score raises downloads by 13.4%" is the finding. The reader will see it's big.
+
+**2. Mechanical structure signposting.** "The remainder of this paper is organized as follows. Section 2 reviews the related literature. Section 3 describes the institutional background." -- This is fine in a 50-page paper. In a 30-page paper it wastes half a page. Just write "Section 2 reviews related work" and move on. Or skip the roadmap entirely if the paper is short.
+
+**3. Vague hedging that hides the ball.** "The results suggest that visibility may play a role in shaping demand outcomes" -- what does this mean? Say "Visibility is the strongest predictor of downloads. The elasticity is 13.4." If you're uncertain, say why you're uncertain, don't just hedge everything.
+
+**4. Synonym cycling in variable descriptions.** "The trending score, which we also refer to as the visibility proxy, platform-assigned prominence metric, and algorithmic ranking signal..." -- pick one name and stick with it.
+
+**5. Rule-of-three in contributions.** "This paper makes three contributions. First... Second... Third..." -- Three is fine if you genuinely have three contributions. But don't pad to reach three. Two is fine. Four is fine. The number doesn't matter.
+
+**6. Copula avoidance.** "The market serves as an arena for competition" -- just say "The market is competitive." Use "is" and "has" freely. They're not weak verbs; they're clear ones.
+
+**7. Formulaic robustness intros.** "We subject our results to a battery of robustness checks" -- don't announce the robustness checks, just do them. "Table 5 re-estimates with base-model nests instead of license nests" is better.
+
+### The Anti-AI Audit for Research Papers
+
+Before submitting any draft, run this two-step check (adapted from the humanizer skill):
+
+**Step 1:** Read your abstract and introduction aloud. Ask: "Does this sound like a person talking to another economist at a seminar, or does it sound like a press release?" If the latter, rewrite.
+
+**Step 2:** Search the document for these high-frequency AI words and replace or cut them:
+- "delve" -> cut or replace with "examine" / "study"
+- "crucial" / "pivotal" -> cut; if something is important, the reader will see it from the numbers
+- "landscape" (abstract noun) -> cut entirely
+- "tapestry" / "interplay" / "synergy" -> cut
+- "underscores" / "highlights" -> "shows" or just state the fact
+- "fosters" / "cultivates" -> say what actually happens
+- "robust" (when describing your own results) -> show the robustness table and let the reader judge
+- "comprehensive" / "holistic" -> almost always padding
+
+**Step 3:** Check every sentence that starts with a participle (-ing). "Leveraging the exogenous variation from the reform, we estimate..." -> "We estimate ... using the reform as an exogenous shock." Active voice, subject first.
+
+**Step 4:** Search for em dashes (--). Replace most with periods or commas. One or two per page is fine. Five per page is AI-coded.
+
+**Step 5:** Do a final pass asking: "If I remove this sentence, does the paper lose anything?" If no, remove it.
+
+### Voice for Economics
+
+Economics papers should sound like one careful thinker explaining their work to another. Not promotional, not self-deprecating, not breathless.
+
+Good models to imitate:
+- Angrist & Pischke: casual but precise, every sentence earns its place
+- Nevo (2000, 2001): clear notation, honest about limitations, no padding
+- Dinerstein et al. (2018): clean structure, the economic question leads every section
+- Berry & Haile (2014): technical but readable, no unnecessary hedging
+
+Bad patterns to avoid:
+- "This is the first paper to..." (probably not true, and referees will check)
+- "Our results have important implications for policy" (show, don't tell)
+- "In this rapidly evolving landscape..." (kill it)
+- "The rest of this paper is structured as follows..." (usually unnecessary)
+
+### Integration with humanizer skill
+
+When generating or editing paper text, reports, or email drafts:
+1. Write the content first using the IO methodology sections above
+2. Then apply `/humanizer` to the output for a de-AI pass
+3. The humanizer will catch patterns that the IO-specific rules above miss (emojis, bold overuse, sycophantic tone, etc.)
+
+For the full 29-pattern humanizer reference, see the companion skill at `~/.claude/skills/humanizer/SKILL.md` or https://github.com/shoal-rat/humanizer
 
 ---
 

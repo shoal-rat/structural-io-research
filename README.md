@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-blueviolet)](https://claude.ai/code)
 
-A comprehensive, practitioner-oriented methodology guide for **structural Industrial Organization (IO) demand estimation research**. Built as a [Claude Code](https://claude.ai/code) skill that provides real-time methodological guidance during research.
+A practitioner-oriented methodology guide for **structural Industrial Organization (IO) demand estimation research** with an integrated **[humanizer](https://github.com/shoal-rat/humanizer)** for natural academic writing. Built as a [Claude Code](https://claude.ai/code) skill that provides real-time methodological and writing guidance during research.
 
 Distilled from two sources:
 1. **Practical experience** from structural demand estimation research on digital platform markets
@@ -21,6 +21,7 @@ Distilled from two sources:
 | **Causal Inference** | Difference-in-Differences, Regression Discontinuity Design | Baker et al. (2025), Roth et al. (2023), Cattaneo et al. (2024) |
 | **Policy Analysis** | Counterfactual simulation, Merger analysis, Consumer search models | Head & Mayer (2026), Ursu (2018), Moraga-Gonzalez et al. (2023) |
 | **Research Craft** | Writing IO papers, Referee expectations, Transparency & replication | Bellemare (2020), Christensen & Miguel (2018) |
+| **Writing Quality** | Anti-AI audit for papers, IO-specific writing traps, voice calibration | Integrated [humanizer](https://github.com/shoal-rat/humanizer) skill |
 
 ---
 
@@ -46,6 +47,7 @@ Distilled from two sources:
 18. **Replication, Transparency, and Credibility** — Code sharing, pre-registration, Christensen & Miguel (2018)
 19. **What Referees Look For in IO Papers** — Common fatal flaws, referee report structure
 20. **Workflow Checklists** — Five-phase checklist from pre-estimation through submission
+21. **Writing Like a Human** — Integrated [humanizer](https://github.com/shoal-rat/humanizer) for IO research: IO-specific AI traps, anti-AI audit for papers, voice calibration for economics
 
 ---
 
