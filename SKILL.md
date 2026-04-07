@@ -800,3 +800,38 @@ When applying the Almagro et al. (2025) data-driven nesting approach to new sett
 
 ### The Completeness Principle
 Every diagnostic should be computed for ALL specifications. Blank cells signal cherry-picking. If a test is not applicable, explain why in a footnote.
+
+---
+
+## 23. RESEARCH RIGOR RULES
+
+### The Verification Principle
+**Every number, method, threshold, and parameter choice must be grounded in published literature.** Before using any specific value (e.g., number of MC replications, bootstrap draws, bandwidth, significance level, number of nests), search the literature to find what authoritative sources recommend, then use the **strictest practicable** value:
+- Monte Carlo replications: 1,000 (most common in published econometrics per Koehler et al. 2009; Paxton et al. 2001 recommend minimum 500; use 1,000 as the strict-but-practicable standard)
+- Bootstrap draws: 200 minimum (Hall 1994; Cameron, Gelbach & Miller 2008), 500+ preferred
+- RDD bandwidth: MSE-optimal via Calonico, Cattaneo & Titiunik (2014), not arbitrary
+- BLP contraction tolerance: 1e-14 (Conlon & Gortmaker 2020)
+- Simulation draws for BLP: 1,000-2,000 Halton minimum (Conlon & Gortmaker 2020)
+- Number of starting values for nonlinear GMM: 5-10 minimum
+- Pre-trend test: do NOT over-interpret (Roth 2022; Rambachan & Roth 2023)
+
+**Do not guess or use round numbers without justification.** If you choose N=100, you must cite why 100 is sufficient. If the literature says 1,000, use 1,000.
+
+### The Universality Principle
+**When you introduce a new test, diagnostic, parameter, or analysis, it must be applied to ALL specifications/models/subsamples in the paper.** Concretely:
+- If you add a placebo lead test → run it for License NL, Base-Model NL, Data-Driven NL, and No-Search. Report all results.
+- If you add a Monte Carlo study → calibrate the DGP to match each major specification (or at minimum the preferred spec and document why).
+- If you add pipeline-level RDD → run for all pipeline types, not just text-to-image.
+- If you compute nest-specific sigma_k → compute for all nesting structures that have nests (License, Base-Model, Data-Driven). Note that No-Search has sigma=0 and explain why sigma_k is not applicable.
+- If you add a causal analysis (DiD, event study, placebo) → run under every specification where the outcome data is available.
+
+**The logic:** A referee seeing sigma_k reported for one nesting but not another will ask "why?" If the answer is "we didn't compute it," that signals incomplete analysis. If the answer is "it's not applicable because sigma=0," say so explicitly.
+
+### The Iteration Principle
+**When iterating on a method (e.g., data-driven nesting v1→v2→v3→v4), document the full iteration log.** Each failed version teaches something. Report:
+1. What you tried
+2. What went wrong (specific diagnostic: sigma hit boundary, correlation was negative, etc.)
+3. What theoretical insight led to the fix
+4. The final working version and why it works
+
+This is not just for transparency — it demonstrates deep understanding of the method and its assumptions. Referees and supervisors value this.
